@@ -10,6 +10,7 @@ export default function HomeScreen() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("Please sign up")
 
+
  
 
     const signUp = () => {

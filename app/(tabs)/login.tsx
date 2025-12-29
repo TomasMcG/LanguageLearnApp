@@ -8,12 +8,13 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("Please Login")
 
+
  
 
   const login = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        setMessage(`Logged in: ${userCredential.user.uid}`);
+        setMessage(`Logged in: ${userCredential.user.email}`);
       })
       .catch((error) => {
         setMessage(`Login error: ${error.message}`);

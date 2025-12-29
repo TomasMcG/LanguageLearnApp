@@ -5,11 +5,30 @@ import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { StyleSheet, Text, View } from 'react-native';
+
+
+
+
+
+function CustomHeader() {
+  return (
+    <View style = {{backgroundColor: "#6998ffff",
+      paddingTop: 50,
+      paddingBottom: 10,
+      alignItems: "center",
+    }}>
+      <Text >My Language App</Text>
+    </View>
+  );
+}
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
+    <>
+    <CustomHeader/>
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
@@ -31,5 +50,6 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </>
   );
 }
