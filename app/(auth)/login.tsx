@@ -1,12 +1,16 @@
+import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { auth } from "../../firebase";
 
+
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("Please Login")
+
+const router = useRouter();
 
 
  
@@ -15,6 +19,7 @@ export default function LoginScreen() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setMessage(`Logged in: ${userCredential.user.email}`);
+        router.replace("/(tabs)/explore")
       })
       .catch((error) => {
         setMessage(`Login error: ${error.message}`);

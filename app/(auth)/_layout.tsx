@@ -9,13 +9,12 @@ import { Text, View } from 'react-native';
 //import { auth } from "../../firebase";
 import { getAuth } from "firebase/auth";
 
-const auth = getAuth();
-const user = auth.currentUser
 
 
-function CustomHeader() {
 
-  
+
+function LoggedOutHeader() {
+
   return (
     <View style = {{backgroundColor: "#6998ffff",
       paddingTop: 50,
@@ -23,12 +22,10 @@ function CustomHeader() {
       alignItems: "center",
     }}>
       <Text >My Language App</Text>
-      <Text>User: {user?.email}</Text>
+    
     </View>
   );
 }
-
-
 
 
 
@@ -37,18 +34,24 @@ export default function TabLayout() {
 
     return (
     <>
-    <CustomHeader/>
+    <LoggedOutHeader/>
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
       }}>
-     
       <Tabs.Screen
-        name="explore"
+        name="index"
         options={{
-          title: 'Explore',
+          title: 'Home',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="login"
+        options={{
+          title: 'Login',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
         }}
       />
