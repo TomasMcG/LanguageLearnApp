@@ -14,14 +14,15 @@ import 'react-native-reanimated';
 
 
 
-const auth = getAuth();
-const user = auth.currentUser
+
 
 
 function CustomHeader() {
-
+const auth = getAuth();
+const user = auth.currentUser
   
   return (
+    
     <View style = {{backgroundColor: "#6998ffff",
       paddingTop: 50,
       paddingBottom: 10,
@@ -38,6 +39,7 @@ function CustomHeader() {
 
 
 export default function TabLayout() {
+  const auth = getAuth();
   const colorScheme = useColorScheme();
 const [user, setUser] = useState(); 
 
