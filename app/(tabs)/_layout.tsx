@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from "react";
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
@@ -7,7 +7,12 @@ import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Text, View } from 'react-native';
 //import { auth } from "../../firebase";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+
+import 'react-native-reanimated';
+
+
 
 const auth = getAuth();
 const user = auth.currentUser
@@ -34,6 +39,12 @@ function CustomHeader() {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+const [user, setUser] = useState(); 
+
+     useEffect(() => {
+    const change = onAuthStateChanged(auth, (firebaseUser) => setUser(firebaseUser as any));
+    return change;
+  }, []);
 
     return (
     <>
