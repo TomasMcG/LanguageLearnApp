@@ -10,7 +10,14 @@ export default function TabTwoScreen() {
  const [userInfo, setUserInfo] = useState<string>("No user");
 
 
- 
+ const handleSignOut = async () => {
+    try {
+      await auth.signOut();
+      setUserInfo("No user logged in");
+    } catch (error: any) {
+      console.log("Sign out error:", error.message);
+    }
+  };
 
   const getCurrentUser = () => {
     const user = auth.currentUser
@@ -28,6 +35,8 @@ export default function TabTwoScreen() {
         <Text> Explore Page</Text>
    <Button title="Get User" onPress={getCurrentUser} />
          <Text>{userInfo}</Text>
+         <Text>Sign out Button Below</Text>
+         <Button title="Sign Out" onPress={handleSignOut} />
         </View>
     );
   }
