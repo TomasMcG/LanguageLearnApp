@@ -5,10 +5,10 @@ import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { auth } from "../../firebase";
 
-
-
+const user = auth.currentUser
 
 
 function CustomHeader() {
@@ -19,6 +19,7 @@ function CustomHeader() {
       alignItems: "center",
     }}>
       <Text >My Language App</Text>
+      <Text>User: {user?.email}</Text>
     </View>
   );
 }
