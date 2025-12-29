@@ -1,24 +1,22 @@
-import {
-  createUserWithEmailAndPassword
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { auth } from "../../firebase";
 
-export default function HomeScreen() {
+export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("Please sign up")
+  const [message, setMessage] = useState("Please Login")
 
  
 
-    const signUp = () => {
-    createUserWithEmailAndPassword(auth, email, password)
+  const login = () => {
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        setMessage(`User created: ${userCredential.user.uid}`);
+        setMessage(`Logged in: ${userCredential.user.uid}`);
       })
       .catch((error) => {
-        setMessage(`Sign up error: ${error.message}`);
+        setMessage(`Login error: ${error.message}`);
       });
   };
 
@@ -39,7 +37,7 @@ export default function HomeScreen() {
         onChangeText={setPassword}
        
       />
-       <Button title="Sign Up" onPress={signUp} />
+       <Button title="Login" onPress={login} />
        <Text>{message}</Text>
       </View>
   );
