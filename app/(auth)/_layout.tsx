@@ -1,13 +1,12 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { styles } from '@/styles/inputStyles';
+import { Tabs } from 'expo-router';
+import React from 'react';
 import { Text, View } from 'react-native';
 //import { auth } from "../../firebase";
-import { getAuth } from "firebase/auth";
 
 
 
@@ -21,7 +20,7 @@ function LoggedOutHeader() {
       paddingBottom: 10,
       alignItems: "center",
     }}>
-      <Text >My Language App</Text>
+      <Text style = {styles.TextHeader} >My Language App</Text>
     
     </View>
   );

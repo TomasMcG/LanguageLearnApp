@@ -3,7 +3,7 @@ import {
   createUserWithEmailAndPassword
 } from "firebase/auth";
 import { useState } from 'react';
-import { Button,  Text, TextInput, View } from 'react-native';
+import { Button, Text, TextInput, View } from 'react-native';
 import { auth } from "../../firebase";
 
 export default function HomeScreen() {
@@ -42,7 +42,7 @@ export default function HomeScreen() {
        
       />
        <Button title="Sign Up" onPress={signUp} />
-       <Text>{message}</Text>
+       <Text style={styles.TextHeader}>{message}</Text>
       </View>
   );
 }

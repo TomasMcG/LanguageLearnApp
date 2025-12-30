@@ -1,7 +1,8 @@
+import { styles } from '@/styles/inputStyles';
 import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, Text, TextInput, View } from 'react-native';
 import { auth } from "../../firebase";
 
 
@@ -30,26 +31,23 @@ const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Text> Email:</Text>
-      <TextInput
+      <Text style={styles.TextHeader}> Email:</Text>
+      <TextInput style={styles.TextInput}
         value={email}
         onChangeText={setEmail}
         
       />
 
-      <Text>Password:</Text>
-      <TextInput
+      <Text style={styles.TextHeader}>Password:</Text>
+      <TextInput style={styles.TextInput}
         value={password}
         onChangeText={setPassword}
        
       />
        <Button title="Login" onPress={login} />
-       <Text>{message}</Text>
+       <Text style={styles.TextHeader}>{message}</Text>
       </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  text: { fontSize: 24, fontWeight: 'bold' },
-});
+
