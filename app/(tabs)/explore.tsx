@@ -1,7 +1,8 @@
 
 
+import { styles } from '@/styles/inputStyles';
 import { useState } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { auth } from "../../firebase";
 
 export default function TabTwoScreen() {
@@ -32,17 +33,13 @@ export default function TabTwoScreen() {
 
 
   <View style={styles.container}>
-        <Text> Explore Page</Text>
+        <Text style={styles.TextHeader}> User Test Page</Text>
    <Button title="Get User" onPress={getCurrentUser} />
-         <Text>{userInfo}</Text>
-         <Text>Sign out Button Below</Text>
+         <Text  style={[styles.TextHeader,styles.buttonSpace]}>{userInfo}</Text>
+         <Text  style={styles.TextHeader}>Sign out Button Below</Text>
          <Button title="Sign Out" onPress={handleSignOut} />
         </View>
     );
   }
   
-  const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-    text: { fontSize: 24, fontWeight: 'bold' },
-  }
-  );
+ 

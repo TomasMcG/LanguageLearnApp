@@ -1,3 +1,4 @@
+import { styles } from '@/styles/inputStyles';
 import { Tabs } from 'expo-router';
 import React, { useEffect, useState } from "react";
 
@@ -28,8 +29,8 @@ const user = auth.currentUser
       paddingBottom: 10,
       alignItems: "center",
     }}>
-      <Text >My Language App</Text>
-      <Text>User: {user?.email}</Text>
+      <Text style = {styles.TextHeader} >My Language App</Text>
+      <Text style = {styles.TextHeader}>User: {user?.email}</Text>
     </View>
   );
 }

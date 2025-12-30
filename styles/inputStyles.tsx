@@ -13,5 +13,8 @@ export const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     marginBottom: 16},
   TextHeader: { fontSize:24},
+  buttonSpace:{
+    marginBottom: 20
+  }
   
 });
