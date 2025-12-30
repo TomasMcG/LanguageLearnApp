@@ -1,0 +1,24 @@
+{
+  "name": "languageapp",
+  "version": "1.0.0",
+  "description": "Final Year Project",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+     "dev": "node --watch --env-file=.env src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TomasMcG/LanguageApp.git"
+  },
+  "author": "TomasMcG",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TomasMcG/LanguageApp/issues"
+  },
+  "homepage": "https://github.com/TomasMcG/LanguageApp#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
