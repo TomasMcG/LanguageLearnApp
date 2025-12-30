@@ -4,9 +4,8 @@ const Schema = mongoose.Schema;
 
 const WordSchema = new Schema({
   wordId: { type:Number, required: true },
-  created_at: {type:Date, default: Date.now},
   wordName: { type: String, required: true },
-  wordAltNames: { type: String}
+  wordTranslation: {type: String}
 
 });
 
