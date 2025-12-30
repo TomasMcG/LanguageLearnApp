@@ -1,9 +1,9 @@
-import { wordData } from "./wordData";
 import express from 'express';
+import { wordData } from "./wordData.js";
 
-const router = express.router();
+const router = express.Router();
 
-router.get('/api/words', (req, res) => {
+router.get('/', (req, res) => {
   res.json(wordData);
 });
 

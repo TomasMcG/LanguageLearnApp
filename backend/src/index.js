@@ -1,7 +1,8 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import wordsRouter from './api/words';
+import wordsRouter from './api/words/index.js';
+import { wordData } from './api/words/wordData.js';
 
 
 
@@ -10,17 +11,18 @@ const app = express()
 const port = process.env.port || 3000;
 
 app.use(cors());
-
+app.use(express.json())
 
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send(wordData)
 })
+app.use('/api/words',wordsRouter);
+
+
+
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
 })
-
-app.arguments(express.json())
-app.user('api/words',wordsRouter);
