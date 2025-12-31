@@ -1,8 +1,5 @@
-export const wordData = {
-    page: 1,
-    total_pages: 1,
-    total_results: 3,
-    words: [
+export const wordData = [
+    
            {
       wordId: 1,
       wordName: "Apple",
@@ -23,4 +20,4 @@ export const wordData = {
     }
 
     
-]};
+];
