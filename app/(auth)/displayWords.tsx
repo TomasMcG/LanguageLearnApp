@@ -1,6 +1,6 @@
 import { styles } from "@/styles/inputStyles";
 import { WordStyles } from "@/styles/wordStyles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
 import { getTopics, getWords } from "../../api/words-api";
 
@@ -18,10 +18,14 @@ export default function DisplayWordsScreen() {
     setTopics(gottenWords);
   };
 
+  useEffect(() => {
+    getAllTopics();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.TextHeader}> Get Words Test Page</Text>
-      <Button title="Get Topics" onPress={getAllTopics} />
+
       <View style={WordStyles.Spacer}></View>
 
       <Text>Topics:</Text>
