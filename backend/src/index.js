@@ -2,6 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import "../db/index.js";
+import topicsRouter from "./api/topics/index.js";
 import wordsRouter from "./api/words/index.js";
 import { wordData } from "./api/words/wordData.js";
 
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
   res.send(wordData);
 });
 app.use("/api/words", wordsRouter);
+app.use("/api/topics", topicsRouter);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
