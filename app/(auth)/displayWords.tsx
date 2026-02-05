@@ -1,7 +1,7 @@
 import { styles } from "@/styles/inputStyles";
 import { WordStyles } from "@/styles/wordStyles";
 import { useEffect, useState } from "react";
-import { Button, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { getTopics, getWords } from "../../api/words-api";
 
 export default function DisplayWordsScreen() {
@@ -20,6 +20,7 @@ export default function DisplayWordsScreen() {
 
   useEffect(() => {
     getAllTopics();
+    getAllWords();
   }, []);
 
   return (
@@ -31,23 +32,20 @@ export default function DisplayWordsScreen() {
       <Text>Topics:</Text>
       {topics.map((topic) => (
         <View key={topic._id} style={WordStyles.TopicBox}>
-          <Text style={WordStyles.TopicText}>
-          {topic.topicName}{" "}
-          </Text>
-        </View>
-      ))}
+          <Text style={WordStyles.TopicText}>{topic.topicName} </Text>
 
-      <View style={WordStyles.Spacer}></View>
+          <View style={WordStyles.Spacer} />
 
-      <Button title="Get Words" onPress={getAllWords} />
-      <View style={WordStyles.Spacer}></View>
-
-      {words.slice(0, words.length).map((word) => (
-        <View key={word.wordId}>
-          <Text style={WordStyles.EnglishWord}>Word: {word.wordName}</Text>
-          <Text style={WordStyles.TranslatedWord}>
-            Translation: {word.wordTranslation}
-          </Text>
+          {words
+            .filter((word) => word.topicName === topic.topicName)
+            .map((word) => (
+              <View key={word._id}>
+                <Text style={WordStyles.EnglishWord}>{word.wordName}</Text>
+                <Text style={WordStyles.TranslatedWord}>
+                  {word.wordTranslation}
+                </Text>
+              </View>
+            ))}
         </View>
       ))}
     </View>
