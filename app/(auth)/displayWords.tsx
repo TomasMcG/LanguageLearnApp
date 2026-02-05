@@ -30,7 +30,11 @@ export default function DisplayWordsScreen() {
 
       <Text>Topics:</Text>
       {topics.map((topic) => (
-        <Text key={topic._id}>{topic.topicName}</Text>
+        <View key={topic._id} style={WordStyles.TopicBox}>
+          <Text style={WordStyles.TopicText}>
+          {topic.topicName}{" "}
+          </Text>
+        </View>
       ))}
 
       <View style={WordStyles.Spacer}></View>
