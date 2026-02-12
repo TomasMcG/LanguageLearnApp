@@ -11,7 +11,7 @@ export default function LearnScreen() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  
+  const [isFlipped, setIsFlipped] = useState(false);
 
   useEffect(() => {
     const fetchWords = async () => {
@@ -36,12 +36,17 @@ export default function LearnScreen() {
     } else {
       setCurrentIndex(0);
     }
+    setIsFlipped(false);
+  };
+
+  const handleFlip = () => {
+    setIsFlipped(true);
   };
 
   let currentWord = words[currentIndex];
 
   while (!currentWord) {
-    currentWord = words[currentIndex]
+    currentWord = words[currentIndex];
     return (
       <View>
         <Text>Loading...</Text>
@@ -53,18 +58,27 @@ export default function LearnScreen() {
     <View>
       <View>
         <Text>Screens For Learning {topic}</Text>
-        <Text>Current word: {currentWord.wordName}</Text>
-        <Text style={WordStyles.EnglishWord}>
-          English:{currentWord.wordName}
-        </Text>
-        <Text style={WordStyles.TranslatedWord}>
-          German:{currentWord.wordTranslation}
-        </Text>
       </View>
-
-      <View style={{ marginTop: 20, width: 150 }}>
-        <Button title="Next" onPress={handleNext} />
-      </View>
+      {!isFlipped ? (
+        /*Front*/ <View>
+          <Text style={WordStyles.EnglishWord}>
+            English:{currentWord.wordName}
+          </Text>
+          <View style={{ marginTop: 20, width: 150 }}>
+            <Button title="Flip" onPress={handleFlip} />
+          </View>
+        </View>
+      ) : (
+        /*Back*/
+        <View>
+          <Text style={WordStyles.TranslatedWord}>
+            German:{currentWord.wordTranslation}
+          </Text>
+          <View style={{ marginTop: 20, width: 150 }}>
+            <Button title="Next" onPress={handleNext} />
+          </View>
+        </View>
+      )}
     </View>
   );
 }
