@@ -1,7 +1,8 @@
 import { styles } from "@/styles/inputStyles";
 import { WordStyles } from "@/styles/wordStyles";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import { getTopics, getWords } from "../../api/words-api";
 
 export default function DisplayWordsScreen() {
@@ -18,6 +19,12 @@ export default function DisplayWordsScreen() {
     setTopics(gottenWords);
   };
 
+  const router = useRouter();
+
+  const learnTopicButton = (topicName: any) => {
+    router.push(`/learn/${topicName}`);
+  };
+
   useEffect(() => {
     getAllTopics();
     getAllWords();
@@ -30,12 +37,16 @@ export default function DisplayWordsScreen() {
       <View style={WordStyles.Spacer}></View>
 
       <Text>Topics:</Text>
+
       {topics.map((topic) => (
         <View key={topic._id} style={WordStyles.TopicBox}>
           <Text style={WordStyles.TopicText}>{topic.topicName} </Text>
 
+          <Button
+            title="Learn"
+            onPress={() => learnTopicButton(topic.topicName)}
+          />
           <View style={WordStyles.Spacer} />
-
           {words
             .filter((word) => word.topicName === topic.topicName)
             .map((word) => (
