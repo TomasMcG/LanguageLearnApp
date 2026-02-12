@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
 import { getWords } from "../../api/words-api";
 
-
 export default function LearnScreen() {
   const { topic } = useLocalSearchParams<{ topic: string }>();
 
