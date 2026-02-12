@@ -1,8 +1,10 @@
+import { styles } from "@/styles/inputStyles";
 import { WordStyles } from "@/styles/wordStyles";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
 import { getWords } from "../../api/words-api";
+
 
 export default function LearnScreen() {
   const { topic } = useLocalSearchParams<{ topic: string }>();
@@ -13,6 +15,7 @@ export default function LearnScreen() {
 
   const [isFlipped, setIsFlipped] = useState(false);
 
+  const router = useRouter();
   useEffect(() => {
     const fetchWords = async () => {
       try {
@@ -34,7 +37,8 @@ export default function LearnScreen() {
     if (currentIndex < words.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      setCurrentIndex(0);
+      // router.push("/(auth)/displayWords");
+      router.back();
     }
     setIsFlipped(false);
   };
@@ -57,7 +61,10 @@ export default function LearnScreen() {
   return (
     <View>
       <View>
-        <Text>Screens For Learning {topic}</Text>
+        <Text style={styles.TextHeader}>Screens For Learning {topic}</Text>
+        <Text style={styles.TextHeader}>
+          Total Words: {words.length}, Current Word: {currentIndex + 1}
+        </Text>
       </View>
       {!isFlipped ? (
         /*Front*/ <View>
@@ -75,7 +82,10 @@ export default function LearnScreen() {
             German:{currentWord.wordTranslation}
           </Text>
           <View style={{ marginTop: 20, width: 150 }}>
-            <Button title="Next" onPress={handleNext} />
+            <Button title="Incorrect" onPress={handleNext} color="red" />
+          </View>
+          <View style={{ marginTop: 20, width: 150 }}>
+            <Button title="Correct" onPress={handleNext} color="green" />
           </View>
         </View>
       )}
