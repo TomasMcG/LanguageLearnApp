@@ -1,13 +1,12 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
 const WordSchema = new Schema({
-  wordId: { type:Number, required: true },
+  wordId: { type: Number, required: true },
   wordName: { type: String, required: true },
-  wordTranslation: {type: String}
-
+  wordTranslation: { type: String },
+  topicName: { type: String, required: true },
 });
 
-
-export default mongoose.model('Word', WordSchema);
+export default mongoose.model("Word", WordSchema);
