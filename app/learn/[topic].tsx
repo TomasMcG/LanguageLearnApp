@@ -1,53 +1,70 @@
 import { WordStyles } from "@/styles/wordStyles";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect,useState } from "react";
-import { Text, View } from "react-native";
-import { getTopics, getWords } from "../../api/words-api";
-import { FlatList } from "react-native-reanimated/lib/typescript/Animated";
+import { useEffect, useState } from "react";
+import { Button, Text, View } from "react-native";
+import { getWords } from "../../api/words-api";
 
 export default function LearnScreen() {
-  const { topic } = useLocalSearchParams();
-  let topicObject;
+  const { topic } = useLocalSearchParams<{ topic: string }>();
 
- const [words, setWords] = useState<any[]>([]);
-  const [filteredWords, setFilteredWords] = useState<any[]>([]);
+  const [words, setWords] = useState<any[]>([]);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  
 
   useEffect(() => {
     const fetchWords = async () => {
-      const allWords = await getWords();
-      setWords(allWords);
+      try {
+        const allWords = await getWords();
+        const filtered = allWords.filter((w: any) => w.topicName === topic);
+        setWords(filtered);
+        setCurrentIndex(0);
+      } catch (error) {
+        console.error("Failed to fetch words:", error);
+      }
     };
-      fetchWords();
-  }, []);
 
-   useEffect(() => {
-    if (topic && words.length > 0) {
-      const filtered = words.filter(
-        (word) => word.topicName === topic
-      );
-      setFilteredWords(filtered);
+    fetchWords();
+  }, [topic]);
+
+  //ToDo, change this to get words of topic, then check their review date.
+
+  const handleNext = () => {
+    if (currentIndex < words.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      setCurrentIndex(0);
     }
-  }, [topic, words]);
+  };
 
- 
-  //ToDo, change this to get words of topic.
+  let currentWord = words[currentIndex];
 
- 
-
+  while (!currentWord) {
+    currentWord = words[currentIndex]
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
-     <View>
-      <Text>Screens For Learning {topic}</Text>
- {words
-          
-            .map((word) => (
-              <View key={word._id}>
-                <Text style={WordStyles.EnglishWord}>{word.wordName}</Text>
-                <Text style={WordStyles.TranslatedWord}>
-                  {word.wordTranslation}
-                </Text>
-              </View>
-            ))}
+    <View>
+      <View>
+        <Text>Screens For Learning {topic}</Text>
+        <Text>Current word: {currentWord.wordName}</Text>
+        <Text style={WordStyles.EnglishWord}>
+          English:{currentWord.wordName}
+        </Text>
+        <Text style={WordStyles.TranslatedWord}>
+          German:{currentWord.wordTranslation}
+        </Text>
+      </View>
+
+      <View style={{ marginTop: 20, width: 150 }}>
+        <Button title="Next" onPress={handleNext} />
+      </View>
     </View>
   );
 }
