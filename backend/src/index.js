@@ -4,6 +4,7 @@ import express from "express";
 import "../db/index.js";
 import topicsRouter from "./api/topics/index.js";
 import wordsRouter from "./api/words/index.js";
+import userWordsRouter from "./api/userWords/index.js"
 import { wordData } from "./api/words/wordData.js";
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/words", wordsRouter);
 app.use("/api/topics", topicsRouter);
+app.use("/api/userWords",userWordsRouter)
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
