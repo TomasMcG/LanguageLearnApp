@@ -20,3 +20,14 @@ export const getTopics = async () => {
     
     return response.json();
 };
+
+export const getUsersWords= async (uid: string) => {
+    const response = await fetch(
+        `http://localhost:3000/api/userWords/${uid}`, {
+           
+        }
+    )
+
+    
+    return response.json();
+};

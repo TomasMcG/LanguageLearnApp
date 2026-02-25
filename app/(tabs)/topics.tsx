@@ -4,15 +4,27 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
 import { getTopics, getWords } from "../../api/words-api";
+ import { auth } from "../../firebase";
 
 export default function DisplayWordsScreen() {
   const [words, setWords] = useState<any[]>([]);
   const [topics, setTopics] = useState<any[]>([]);
 
+ 
+
+const user = auth.currentUser;
+
   const getAllWords = async () => {
     const gottenWords = await getWords();
     setWords(gottenWords);
   };
+
+  if (user) {
+  const uid = user.uid; 
+  console.log("Logged in user UID:", uid);
+} else {
+  console.log("No user is logged in yet");
+}
 
   const getAllTopics = async () => {
     const gottenWords = await getTopics();

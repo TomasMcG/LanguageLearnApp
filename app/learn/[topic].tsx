@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
 import { getWords } from "../../api/words-api";
+import { getUsersWords } from "../../api/words-api";
 
 export default function LearnScreen() {
   const { topic } = useLocalSearchParams<{ topic: string }>();
@@ -60,6 +61,7 @@ export default function LearnScreen() {
   return (
     <View>
       <View>
+        <Text>User Id: </Text>
         <Text style={styles.TextHeader}>Screens For Learning {topic}</Text>
         <Text style={styles.TextHeader}>
           Total Words: {words.length}, Current Word: {currentIndex + 1}
