@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/:uid", async (req, res) => {
   try {
     console.log( req.params.uid);
-    const gottenUsersWords = await userWords.find()
+    const gottenUsersWords = await userWords.find({userId: req.params.uid})
     console.log("Users WORDS FROM DB:", gottenUsersWords);
 
     res.status(200).json(gottenUsersWords);
