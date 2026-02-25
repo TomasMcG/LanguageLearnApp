@@ -27,7 +27,6 @@ export const getUsersWords= async (uid: string) => {
            
         }
     )
-
     
     return response.json();
 };

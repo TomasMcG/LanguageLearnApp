@@ -1,17 +1,16 @@
 import express from "express";
 //import { wordData } from "./wordData.js";
-import UserWord from "./userWordModel.js";
+import userWords from "./userWordModel.js";
 
 const router = express.Router();
 
 router.get("/:uid", async (req, res) => {
   try {
-    const userWords = await UserWord.find({ userId: req.params.uid }).populate(
-      "wordId",
-    );
-    console.log("Users WORDS FROM DB:", userWords);
+    console.log( req.params.uid);
+    const gottenUsersWords = await userWords.find()
+    console.log("Users WORDS FROM DB:", gottenUsersWords);
 
-    res.status(200).json(userWords);
+    res.status(200).json(gottenUsersWords);
   } catch (err) {
     res.status(500).json([]);
   }
