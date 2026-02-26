@@ -43,6 +43,7 @@ export default function LearnScreen() {
             userWord.isKnown && new Date(userWord.nextReviewDate) <= now
           )
         : [];
+        
         const dueWords = reviewWords.map((knownWords: any) => knownWords.wordId)
         filtered = filtered.filter((w: any) => dueWords.includes(w._id))
 
