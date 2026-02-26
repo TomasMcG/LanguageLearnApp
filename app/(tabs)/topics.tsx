@@ -1,16 +1,17 @@
 import { styles } from "@/styles/inputStyles";
 import { WordStyles } from "@/styles/wordStyles";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
 import { getTopics, getUsersWords, getWords } from "../../api/words-api";
+import Spinner from "../../components/spinner/index.jsx";
 import { auth } from "../../firebase";
 
 export default function DisplayWordsScreen() {
   const [words, setWords] = useState<any[]>([]);
-  const [usersWords, setUsersWords] = useState<any[]>([]);
+
   const [topics, setTopics] = useState<any[]>([]);
-  const [knownWords, setKnownWords] = useState<any[]>([]);
 
   let user = auth.currentUser;
   if (user) {
@@ -20,11 +21,6 @@ export default function DisplayWordsScreen() {
     console.log("No user is logged in yet");
   }
 
-  const getAllUsersWords = async () => {
-    const gottenWords = await getUsersWords(user!.uid);
-    console.log("Gotten Words:", gottenWords);
-    setUsersWords(gottenWords);
-  };
   const getAllWords = async () => {
     const gottenWords = await getWords();
     setWords(gottenWords);
@@ -35,15 +31,20 @@ export default function DisplayWordsScreen() {
     setTopics(gottenWords);
   };
 
-    const getAllKnownWords = async () => {
-      console.log("UsersWords",usersWords)
-    const kWords = usersWords
-      .filter((word) => word.isKnown )
-      .map((knownWords) => knownWords.wordId);
+  const {
+    data: usersWords,
+    error,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["userWords"],
+    queryFn: () => getUsersWords(user!.uid),
+  });
 
-    console.log("Known Words", kWords);
-    setKnownWords(kWords);
-  };
+  const knownWords = usersWords 
+  ? usersWords
+    .filter((word: any) => word.isKnown)
+    .map((knownWords: any) => knownWords.wordId):[];
 
   const router = useRouter();
 
@@ -54,28 +55,24 @@ export default function DisplayWordsScreen() {
   useEffect(() => {
     getAllTopics();
     getAllWords();
-    getAllUsersWords();
-    getAllKnownWords();
+    
   }, []);
 
-  while (!user || !usersWords) {
-    user = auth.currentUser;
-    getUsersWords(user!.uid);
-    getAllKnownWords()
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
+
+
+  if (isPending) {
+    return ;
   }
 
-
+  if (isError) {
+    return <h1>{error.message}</h1>;
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.TextHeader}> Get Words Test Page</Text>
       <Text>User id:</Text>
-      <Button title="Get user words" onPress={() => getAllUsersWords()} />
+    
       <View style={WordStyles.Spacer}></View>
 
       <Text>Topics:</Text>
@@ -97,7 +94,7 @@ export default function DisplayWordsScreen() {
             />
             <View style={WordStyles.Spacer} />
             <Text>Number of words: {wordsForTopic.length}</Text>
-            <Text>Number of known words:{knownWords}</Text>
+            <Text>Number of known words:{knownWordsForTopic.length}</Text>
           </View>
         );
       })}
