@@ -9,7 +9,7 @@ const UserWordSchema = new Schema({
   lastReviewed: { type: Date, default: Date.now },
   timeToNextReview: { type: Number, default: 0 },
   nextReviewDate: { type: Date, default: Date.now },
-  isKnown: { type: Number, required: true },
+  isKnown: { type: Boolean, required: true },
 });
 
-export default mongoose.model("userWords", UserWordSchema,"userWords");
+export default mongoose.model("userWords", UserWordSchema, "userWords");
