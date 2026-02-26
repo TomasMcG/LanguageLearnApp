@@ -86,6 +86,10 @@ export default function DisplayWordsScreen() {
           knownWords.includes(word._id),
         );
 
+        const unknownWordsForTopic = wordsForTopic.filter((word) =>
+          !knownWords.includes(word._id),
+        );
+
          let isTopicComplete;
           if  (knownWordsForTopic.length === wordsForTopic.length){
             isTopicComplete = "Complete"
@@ -105,6 +109,7 @@ export default function DisplayWordsScreen() {
             <Text>Number of words: {wordsForTopic.length}</Text>
             <Text>Number of known words:{knownWordsForTopic.length}</Text>
             <Text>Progress: {isTopicComplete}</Text>
+            <Text>Unkown Words: {unknownWordsForTopic.length} </Text>
           </View>
         );
       })}
