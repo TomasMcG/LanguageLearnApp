@@ -60,6 +60,7 @@ export default function DisplayWordsScreen() {
 
 
 
+
   if (isPending) {
     return ;
   }
@@ -85,6 +86,14 @@ export default function DisplayWordsScreen() {
           knownWords.includes(word._id),
         );
 
+         let isTopicComplete;
+          if  (knownWordsForTopic.length === wordsForTopic.length){
+            isTopicComplete = "Complete"
+         }
+         else {
+          isTopicComplete = "Incomplete"
+         };
+
         return (
           <View key={topic._id} style={WordStyles.TopicBox}>
             <Text style={WordStyles.TopicText}>{topic.topicName}</Text>
@@ -95,6 +104,7 @@ export default function DisplayWordsScreen() {
             <View style={WordStyles.Spacer} />
             <Text>Number of words: {wordsForTopic.length}</Text>
             <Text>Number of known words:{knownWordsForTopic.length}</Text>
+            <Text>Progress: {isTopicComplete}</Text>
           </View>
         );
       })}
