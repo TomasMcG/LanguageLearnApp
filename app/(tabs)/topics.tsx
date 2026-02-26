@@ -35,9 +35,9 @@ export default function DisplayWordsScreen() {
     error,
     isPending,
     isError,
-  } = useQuery({
-    queryKey: ["userWords"],
-    queryFn: () => getUsersWords(user!.uid),
+  } = useQuery<any[]>({
+    queryKey: ["userWords", user?.uid],
+  queryFn: () => getUsersWords(user!.uid)
   });
 
   const knownWords = usersWords

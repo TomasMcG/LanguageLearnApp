@@ -5,8 +5,23 @@ import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
 import { getWords } from "../../api/words-api";
 import { getUsersWords } from "../../api/words-api";
+import { useQuery } from "@tanstack/react-query";
+import { auth } from "../../firebase";
 
 export default function LearnScreen() {
+ let user = auth.currentUser;
+
+    const {
+    data: usersWords,
+    error,
+    isPending,
+    isError,
+  } = useQuery<any[]>({
+    queryKey: ["userWords", user?.uid],
+  queryFn: () => getUsersWords(user!.uid)
+    
+  });
+
   const { topic } = useLocalSearchParams<{ topic: string }>();
 
   const [words, setWords] = useState<any[]>([]);
@@ -20,7 +35,17 @@ export default function LearnScreen() {
     const fetchWords = async () => {
       try {
         const allWords = await getWords();
-        const filtered = allWords.filter((w: any) => w.topicName === topic);
+        let filtered = allWords.filter((w: any) => w.topicName === topic);
+        
+        const now = new Date();
+           const reviewWords = usersWords 
+        ? usersWords.filter((userWord: any) => 
+            userWord.isKnown && new Date(userWord.nextReviewDate) <= now
+          )
+        : [];
+        const dueWords = reviewWords.map((knownWords: any) => knownWords.wordId)
+        filtered = filtered.filter((w: any) => dueWords.includes(w._id))
+
         setWords(filtered);
         setCurrentIndex(0);
       } catch (error) {
@@ -29,7 +54,7 @@ export default function LearnScreen() {
     };
 
     fetchWords();
-  }, [topic]);
+  }, [topic,usersWords]);
 
   //ToDo, change this to get words of topic, then check their review date.
 
@@ -56,6 +81,14 @@ export default function LearnScreen() {
         <Text>Loading...</Text>
       </View>
     );
+  }
+
+  if (isPending) {
+    return;
+  }
+
+  if (isError) {
+    return <h1>{error.message}</h1>;
   }
 
   return (
