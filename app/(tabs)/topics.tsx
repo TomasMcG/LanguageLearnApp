@@ -5,7 +5,6 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
 import { getTopics, getUsersWords, getWords } from "../../api/words-api";
-import Spinner from "../../components/spinner/index.jsx";
 import { auth } from "../../firebase";
 
 export default function DisplayWordsScreen() {
@@ -41,12 +40,17 @@ export default function DisplayWordsScreen() {
     queryFn: () => getUsersWords(user!.uid),
   });
 
-  const knownWords = usersWords 
-  ? usersWords
-    .filter((word: any) => word.isKnown)
-    .map((knownWords: any) => knownWords.wordId):[];
+  const knownWords = usersWords
+    ? usersWords
+        .filter((word: any) => word.isKnown)
+        .map((knownWords: any) => knownWords.wordId)
+    : [];
 
   const router = useRouter();
+
+  const reviseTopicButton = (topicName: any) => {
+    router.push(`/revise/${topicName}`);
+  };
 
   const learnTopicButton = (topicName: any) => {
     router.push(`/learn/${topicName}`);
@@ -55,14 +59,10 @@ export default function DisplayWordsScreen() {
   useEffect(() => {
     getAllTopics();
     getAllWords();
-    
   }, []);
 
-
-
-
   if (isPending) {
-    return ;
+    return;
   }
 
   if (isError) {
@@ -73,7 +73,7 @@ export default function DisplayWordsScreen() {
     <View style={styles.container}>
       <Text style={styles.TextHeader}> Get Words Test Page</Text>
       <Text>User id:</Text>
-    
+
       <View style={WordStyles.Spacer}></View>
 
       <Text>Topics:</Text>
@@ -86,30 +86,34 @@ export default function DisplayWordsScreen() {
           knownWords.includes(word._id),
         );
 
-        const unknownWordsForTopic = wordsForTopic.filter((word) =>
-          !knownWords.includes(word._id),
+        const unknownWordsForTopic = wordsForTopic.filter(
+          (word) => !knownWords.includes(word._id),
         );
 
-         let isTopicComplete;
-          if  (knownWordsForTopic.length === wordsForTopic.length){
-            isTopicComplete = "Complete"
-         }
-         else {
-          isTopicComplete = "Incomplete"
-         };
+        let isTopicComplete;
+        if (knownWordsForTopic.length === wordsForTopic.length) {
+          isTopicComplete = "Complete";
+        } else {
+          isTopicComplete = "Incomplete";
+        }
 
         return (
           <View key={topic._id} style={WordStyles.TopicBox}>
             <Text style={WordStyles.TopicText}>{topic.topicName}</Text>
             <Button
-              title="Learn"
-              onPress={() => learnTopicButton(topic.topicName)}
+              title="Revise"
+              onPress={() => reviseTopicButton(topic.topicName)}
             />
             <View style={WordStyles.Spacer} />
             <Text>Number of words: {wordsForTopic.length}</Text>
             <Text>Number of known words:{knownWordsForTopic.length}</Text>
             <Text>Progress: {isTopicComplete}</Text>
             <Text>Unkown Words: {unknownWordsForTopic.length} </Text>
+            <Button
+              title="Learn"
+              onPress={() => learnTopicButton(topic.topicName)}
+            />
+            <Text>Words for Review: </Text>
           </View>
         );
       })}
