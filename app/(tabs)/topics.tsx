@@ -56,10 +56,12 @@ export default function DisplayWordsScreen() {
     router.push(`/learn/${topicName}`);
   };
 
+
   useEffect(() => {
     getAllTopics();
     getAllWords();
   }, []);
+
 
   if (isPending) {
     return;
@@ -84,11 +86,21 @@ export default function DisplayWordsScreen() {
         );
         const knownWordsForTopic = wordsForTopic.filter((word) =>
           knownWords.includes(word._id),
+        
         );
 
         const unknownWordsForTopic = wordsForTopic.filter(
           (word) => !knownWords.includes(word._id),
         );
+
+           const now = new Date();
+           const reviewWords = usersWords 
+        ? usersWords.filter((userWord: any) => 
+            userWord.isKnown && new Date(userWord.nextReviewDate) <= now
+          )
+        : [];
+         
+    
 
         let isTopicComplete;
         if (knownWordsForTopic.length === wordsForTopic.length) {
@@ -100,20 +112,20 @@ export default function DisplayWordsScreen() {
         return (
           <View key={topic._id} style={WordStyles.TopicBox}>
             <Text style={WordStyles.TopicText}>{topic.topicName}</Text>
-            <Button
-              title="Revise"
-              onPress={() => reviseTopicButton(topic.topicName)}
-            />
             <View style={WordStyles.Spacer} />
+              <Text>Progress: {isTopicComplete}</Text>
             <Text>Number of words: {wordsForTopic.length}</Text>
             <Text>Number of known words:{knownWordsForTopic.length}</Text>
-            <Text>Progress: {isTopicComplete}</Text>
             <Text>Unkown Words: {unknownWordsForTopic.length} </Text>
             <Button
               title="Learn"
               onPress={() => learnTopicButton(topic.topicName)}
             />
-            <Text>Words for Review: </Text>
+            <Text>Words for Review: {reviewWords.length}</Text>
+             <Button
+              title="Revise"
+              onPress={() => reviseTopicButton(topic.topicName)}
+            />
           </View>
         );
       })}
