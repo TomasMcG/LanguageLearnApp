@@ -60,7 +60,7 @@ export default function DisplayWordsScreen() {
 
   while (!user || !usersWords) {
     user = auth.currentUser;
-    getUsersWords(user!.uid).then(setUsersWords);
+    getUsersWords(user!.uid);
     getAllKnownWords()
     return (
       <View>
