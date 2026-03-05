@@ -4,17 +4,19 @@ import { styles } from '@/styles/inputStyles';
 import { useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import { auth } from "../../firebase";
-
+import {useRouter} from "expo-router"
 export default function TabTwoScreen() {
 
 
  const [userInfo, setUserInfo] = useState<string>("No user");
 
-
+  const router = useRouter();
  const handleSignOut = async () => {
     try {
       await auth.signOut();
+      router.replace("/(auth)");
       setUserInfo("No user logged in");
+      
     } catch (error: any) {
       console.log("Sign out error:", error.message);
     }

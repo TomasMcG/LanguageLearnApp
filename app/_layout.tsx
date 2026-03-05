@@ -6,11 +6,19 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import 'react-native-reanimated';
 import { auth } from "../firebase";
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 
 
-
-
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 360000,
+      refetchInterval: 360000, 
+      refetchOnWindowFocus: false
+    },
+  },
+});
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -26,7 +34,9 @@ const [user, setUser] = useState();
  
 
   return (
+     <QueryClientProvider client={queryClient}>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      
       <Stack>
             {user ? (
           // User is logged in
@@ -39,5 +49,6 @@ const [user, setUser] = useState();
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
+    </QueryClientProvider>
   );
 }
