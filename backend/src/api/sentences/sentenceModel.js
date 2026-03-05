@@ -15,7 +15,6 @@ const SentenceSchema = new Schema({
     },
   ],
   /*userId:{},*/
-  topicName: { type: String, required: true },
 });
 
 export default mongoose.model("Sentence", SentenceSchema);

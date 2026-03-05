@@ -1,6 +1,6 @@
 import express from "express";
 //import { wordData } from "./wordData.js";
-import sentence from "./sentenceModel";
+import sentence from "./sentenceModel.js";
 
 const router = express.Router();
 
@@ -14,7 +14,5 @@ router.get("/", async (req, res) => {
     res.status(500).json([]);
   }
 });
-
-
 
 export default router;
