@@ -34,3 +34,8 @@ export const addKnownUserWord = async (wordId: any, userId: any) => {
 
   return res.json();
 };
+
+export const getSentences = async () => {
+  const response = await fetch(`http://localhost:3000/api/sentences`, {});
+  return response.json();
+};

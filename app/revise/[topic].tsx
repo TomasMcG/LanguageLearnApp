@@ -3,7 +3,7 @@ import { WordStyles } from "@/styles/wordStyles";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
-import { getUsersWords, getWords } from "../../api/words-api";
+import { getUsersWords, getWords,getSentences } from "../../api/words-api";
 
 import { useQuery } from "@tanstack/react-query";
 import { auth } from "../../firebase";
@@ -28,12 +28,16 @@ export default function LearnScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const [isFlipped, setIsFlipped] = useState(false);
+  const [sentences,setSentences] =useState<any[]>([])
+  const [allSentences,setAllSentences] =useState<any[]>([])
 
   const router = useRouter();
   useEffect(() => {
+     getAllSentences();
     const fetchWords = async () => {
       try {
         const allWords = await getWords();
+       
         let filtered = allWords.filter((w: any) => w.topicName === topic);
 
         const now = new Date();
@@ -59,6 +63,17 @@ export default function LearnScreen() {
     fetchWords();
   }, [topic, usersWords]);
 
+
+  useEffect(() => {
+  if (!words[currentIndex] || allSentences.length === 0) return;
+
+  const matching = allSentences.filter((sentence: any) =>
+    sentence.wordIds.includes(words[currentIndex]._id)
+  );
+
+  setSentences(matching);
+}, [currentIndex, allSentences, words]);
+
   //ToDo, change this to get words of topic, then check their review date.
 
   const handleNext = () => {
@@ -74,6 +89,14 @@ export default function LearnScreen() {
   const handleFlip = () => {
     setIsFlipped(true);
   };
+
+  const getAllSentences = async () => {
+        const allSentences = await getSentences();
+        setAllSentences(allSentences)
+  }
+
+ 
+
 
   let currentWord = words[currentIndex];
 
@@ -117,6 +140,19 @@ export default function LearnScreen() {
         <View>
           <Text style={WordStyles.TranslatedWord}>
             German:{currentWord.wordTranslation}
+          </Text>
+          <Text>
+            Sentence Examples:
+
+          
+              {sentences.map((sentence, index) => (
+    <View key={index}>
+      <Text>English: {sentence.englishTranslation}</Text>
+      <Text>German: {sentence.sentenceText}</Text>
+    </View>
+  ))}
+            
+
           </Text>
           <View style={{ marginTop: 20, width: 150 }}>
             <Button title="Incorrect" onPress={handleNext} color="red" />
