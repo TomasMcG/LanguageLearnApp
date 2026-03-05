@@ -2,8 +2,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import "../db/index.js";
-import topicsRouter from "./api/topics/index.js";
+import topicsRouter from "./api/Topics/index.js";
 import wordsRouter from "./api/words/index.js";
+import sentencesRouter from "./api/sentences/index.js";
 import userWordsRouter from "./api/userWords/index.js"
 import { wordData } from "./api/words/wordData.js";
 
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 app.use("/api/words", wordsRouter);
 app.use("/api/topics", topicsRouter);
 app.use("/api/userWords",userWordsRouter)
+app.use("/api/sentences",sentencesRouter)
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
