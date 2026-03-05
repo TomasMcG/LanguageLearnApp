@@ -3,7 +3,7 @@ import { WordStyles } from "@/styles/wordStyles";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
-import { getUsersWords, getWords } from "../../api/words-api";
+import { addKnownUserWord, getUsersWords, getWords } from "../../api/words-api";
 
 import { useQuery } from "@tanstack/react-query";
 import { auth } from "../../firebase";
@@ -37,7 +37,6 @@ export default function LearnScreen() {
         const allWords = await getWords();
         let filtered = allWords.filter((w: any) => w.topicName === topic);
 
-        const now = new Date();
         const reviewWords = usersWords
           ? usersWords.filter((userWord: any) => userWord.isKnown)
           : [];
@@ -54,15 +53,12 @@ export default function LearnScreen() {
     };
 
     fetchWords();
-  }, [topic]);
-
-  //ToDo, change this to get words of topic, then check their review date.
+  }, [topic, usersWords]);
 
   const handleNext = () => {
     if (currentIndex < words.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      // router.push("/(auth)/displayWords");
       router.back();
     }
     setIsFlipped(false);
@@ -73,6 +69,15 @@ export default function LearnScreen() {
   };
 
   let currentWord = words[currentIndex];
+
+  const addWordToKnown = () => {
+    console.log("Current word:", currentWord);
+    
+    if (user != null) {
+      addKnownUserWord(currentWord._id, user?.uid);
+    }
+    handleNext();
+  };
 
   while (!currentWord) {
     currentWord = words[currentIndex];
@@ -116,10 +121,7 @@ export default function LearnScreen() {
             German:{currentWord.wordTranslation}
           </Text>
           <View style={{ marginTop: 20, width: 150 }}>
-            <Button title="Incorrect" onPress={handleNext} color="red" />
-          </View>
-          <View style={{ marginTop: 20, width: 150 }}>
-            <Button title="Correct" onPress={handleNext} color="green" />
+            <Button title="Next Word" onPress={addWordToKnown} color="green" />
           </View>
         </View>
       )}
