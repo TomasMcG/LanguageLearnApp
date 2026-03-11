@@ -30,7 +30,7 @@ export default function LearnScreen() {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const router = useRouter();
-
+  let knownWords:any;
   useEffect(() => {
     const fetchWords = async () => {
       try {
@@ -41,9 +41,8 @@ export default function LearnScreen() {
           ? usersWords.filter((userWord: any) => userWord.isKnown)
           : [];
 
-        const knownWords = reviewWords.map(
-          (knownWords: any) => knownWords.wordId,
-        );
+        knownWords = reviewWords.map((knownWords: any) => knownWords.wordId);
+
         filtered = filtered.filter((w: any) => !knownWords.includes(w._id));
         setWords(filtered);
         setCurrentIndex(0);
@@ -72,7 +71,7 @@ export default function LearnScreen() {
 
   const addWordToKnown = () => {
     console.log("Current word:", currentWord);
-    
+
     if (user != null) {
       addKnownUserWord(currentWord._id, user?.uid);
     }
@@ -94,6 +93,23 @@ export default function LearnScreen() {
 
   if (isError) {
     return <h1>{error.message}</h1>;
+  }
+
+  if (!knownWords) {
+    return (
+      <View>
+        <View>
+          <Text>User Id: </Text>
+          <Text style={styles.TextHeader}>Screens For Learning {topic}</Text>
+          <Text style={styles.TextHeader}>
+            Total Words: {words.length}, Learning Objectives: By doing this
+            topic you will encounter each of the following words which will then
+            become available for review. By reviewing after having improved your
+            retention the outcome is to learn the translation of the words.
+          </Text>
+        </View>
+      </View>
+    );
   }
 
   return (
