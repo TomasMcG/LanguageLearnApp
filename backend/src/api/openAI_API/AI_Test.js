@@ -14,7 +14,7 @@ Return JSON: sentence, translation.
 const grammerRules = ["PastTense,PresentTense","VerbEndings"]
 const knownWords = ["apfel","Banane","Rot","Haus"]
 const userMessage = `
-Generate 5 Spanish sentences using only these words: ${knownWords} and grammer rules: ${grammerRules}
+Generate 5 sentences using only these words: ${knownWords} and grammer rules: ${grammerRules}
 `;
 
 const response = await client.responses.create({

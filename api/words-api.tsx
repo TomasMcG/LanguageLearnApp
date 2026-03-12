@@ -21,7 +21,7 @@ export const getUsersWords = async (uid: string) => {
 
 export const addKnownUserWord = async (wordId: any, userId: any) => {
   console.log("Using front end post api for user words");
- 
+
   const res = await fetch(`http://localhost:3000/api/userWords`, {
     method: "POST",
     headers: {
@@ -37,5 +37,13 @@ export const addKnownUserWord = async (wordId: any, userId: any) => {
 
 export const getSentences = async () => {
   const response = await fetch(`http://localhost:3000/api/sentences`, {});
+  return response.json();
+};
+
+export const generateSentences = async (words: String[]) => {
+  const response = await fetch(
+    `http://localhost:3000/api/OpenAI_API/generateSentences`,
+    {},
+  );
   return response.json();
 };
