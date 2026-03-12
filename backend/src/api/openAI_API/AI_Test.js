@@ -27,4 +27,5 @@ const response = await client.responses.create({
 
 
 
+
 console.log(response.output_text);
