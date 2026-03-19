@@ -29,8 +29,10 @@ export default function LearnScreen() {
 
   const [isFlipped, setIsFlipped] = useState(false);
 
+  const [knownWords, setKnownWords] = useState<string[]>([]);
+
   const router = useRouter();
-  let knownWords:any;
+ 
   useEffect(() => {
     const fetchWords = async () => {
       try {
@@ -41,8 +43,8 @@ export default function LearnScreen() {
           ? usersWords.filter((userWord: any) => userWord.isKnown)
           : [];
 
-        knownWords = reviewWords.map((knownWords: any) => knownWords.wordId);
-
+        const kWords= reviewWords.map((knownWords: any) => knownWords.wordId);
+        setKnownWords(kWords);
         filtered = filtered.filter((w: any) => !knownWords.includes(w._id));
         setWords(filtered);
         setCurrentIndex(0);
@@ -87,14 +89,6 @@ export default function LearnScreen() {
     );
   }
 
-  if (isPending) {
-    return;
-  }
-
-  if (isError) {
-    return <h1>{error.message}</h1>;
-  }
-
   if (!knownWords) {
     return (
       <View>
@@ -111,6 +105,17 @@ export default function LearnScreen() {
       </View>
     );
   }
+
+  
+  if (isPending ) {
+    return;
+  }
+
+  if (isError) {
+    return <h1>{error.message}</h1>;
+  }
+
+  
 
   return (
     <View>

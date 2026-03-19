@@ -26,7 +26,6 @@ export const addKnownUserWord = async (wordId: any, userId: any) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("token") || "",
     },
     body: JSON.stringify({ wordId, userId }),
   });
@@ -40,10 +39,18 @@ export const getSentences = async () => {
   return response.json();
 };
 
-export const generateSentences = async (words: String[]) => {
+
+
+export const generateSentences = async (words: string[]) => {
   const response = await fetch(
-    `http://localhost:3000/api/OpenAI_API/generateSentences`,
-    {},
+    `http://localhost:3000/api/openAI_API/generateSentences`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" ,
+        Authorization: window.localStorage.getItem("token") || "",},
+      body: JSON.stringify({ knownWords: words }),
+    }
+    
   );
   return response.json();
 };
