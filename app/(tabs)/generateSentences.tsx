@@ -1,4 +1,5 @@
 import { styles } from "@/styles/inputStyles";
+import { sentenceStyles } from "@/styles/sentenceStyles";
 import { useState } from "react";
 import { ActivityIndicator, Button, ScrollView, Text, View } from "react-native";
 import { auth } from "../../firebase";
@@ -41,13 +42,19 @@ export default function GenerateSentencesScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.TextHeader}>Generate Sentences</Text>
-
+    <View style={{ marginVertical: 15 }}>
       <Button title="Generate Sentences" onPress={makeSentences} />
+      </View>
 
       {sentences.map((item, index) => (
-        <View key={index}>
-          <Text>{item.sentence}</Text>
-          <Text>{item.translation}</Text>
+        <View key={index} style={sentenceStyles.card}>
+          <Text style={sentenceStyles.sentence}>
+      {item.sentence}
+    </Text>
+
+    <Text style={sentenceStyles.translation}>
+      {item.translation}
+    </Text>
         </View>
       ))}
     </ScrollView>
