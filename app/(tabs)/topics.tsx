@@ -1,9 +1,10 @@
 import { styles } from "@/styles/inputStyles";
 import { WordStyles } from "@/styles/wordStyles";
+import { topicStyles } from "@/styles/topicStyles";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Button, Text, View } from "react-native";
+import { Button, Text, View, ScrollView} from "react-native";
 import { getTopics, getUsersWords, getWords } from "../../api/words-api";
 import { auth } from "../../firebase";
 
@@ -72,7 +73,7 @@ export default function DisplayWordsScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.TextHeader}> Get Words Test Page</Text>
       <Text>User id:</Text>
 
@@ -110,25 +111,47 @@ export default function DisplayWordsScreen() {
         }
 
         return (
-          <View key={topic._id} style={WordStyles.TopicBox}>
-            <Text style={WordStyles.TopicText}>{topic.topicName}</Text>
-            <View style={WordStyles.Spacer} />
-              <Text>Progress: {isTopicComplete}</Text>
-            <Text>Number of words: {wordsForTopic.length}</Text>
-            <Text>Number of known words:{knownWordsForTopic.length}</Text>
-            <Text>Unkown Words: {unknownWordsForTopic.length} </Text>
+          <View key={topic._id}  style={topicStyles.card}>
+            <Text style={topicStyles.title}>{topic.topicName}</Text>
+
+          
+
+        
+              <View style={topicStyles.statsColumn}>
+             <Text style={topicStyles.stat}>
+      Total: {wordsForTopic.length}
+    </Text>
+            <Text style={topicStyles.stat}>
+      Known: {knownWordsForTopic.length}
+    </Text>
+            <Text style={topicStyles.stat}>
+      New: {unknownWordsForTopic.length}
+    </Text>
+    </View>
+
+      <Text style={topicStyles.review}>
+    For Review: {reviewWords.length}
+  </Text>
+
+  
+     <View style={topicStyles.buttonWrapper}>
             <Button
               title="Learn"
               onPress={() => learnTopicButton(topic.topicName)}
             />
-            <Text>Words for Review: {reviewWords.length}</Text>
+             </View>
+
+             <View style={topicStyles.buttonWrapper}>
+           
              <Button
               title="Revise"
               onPress={() => reviseTopicButton(topic.topicName)}
             />
+            </View>
+           
           </View>
         );
       })}
-    </View>
+    </ScrollView>
   );
 }

@@ -51,4 +51,68 @@ export const WordStyles = StyleSheet.create({
     color: "#0066ff",
     fontWeight: "bold",
   },
+
+
+   card: {
+    margin: 20,
+    padding: 20,
+    borderRadius: 16,
+    backgroundColor: "#fff",
+    elevation: 3, // Android shadow
+    shadowColor: "#000", // iOS shadow
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+  },
+
+  label: {
+    fontSize: 14,
+    color: "#888",
+    marginBottom: 10,
+  },
+
+  mainWord: {
+    fontSize: 32,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+
+  subHeader: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 10,
+  },
+
+  divider: {
+    height: 1,
+    backgroundColor: "#eee",
+    marginVertical: 20,
+  },
+
+  sentenceBox: {
+    marginBottom: 10,
+    padding: 10,
+    backgroundColor: "#f7f7f7",
+    borderRadius: 10,
+  },
+
+  sentenceEn: {
+    fontSize: 14,
+    color: "#333",
+  },
+
+  sentenceDe: {
+    fontSize: 14,
+    color: "#666",
+  },
+
+  buttonWrap: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+
+  buttonRow: {
+    marginTop: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  }
 });

@@ -3,7 +3,7 @@ import { WordStyles } from "@/styles/wordStyles";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
-import { getUsersWords, getWords } from "../../api/words-api";
+import { getSentences, getUsersWords, getWords } from "../../api/words-api";
 
 import { useQuery } from "@tanstack/react-query";
 import { auth } from "../../firebase";
@@ -28,12 +28,16 @@ export default function LearnScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const [isFlipped, setIsFlipped] = useState(false);
+  const [sentences, setSentences] = useState<any[]>([]);
+  const [allSentences, setAllSentences] = useState<any[]>([]);
 
   const router = useRouter();
   useEffect(() => {
+    getAllSentences();
     const fetchWords = async () => {
       try {
         const allWords = await getWords();
+
         let filtered = allWords.filter((w: any) => w.topicName === topic);
 
         const now = new Date();
@@ -59,6 +63,16 @@ export default function LearnScreen() {
     fetchWords();
   }, [topic, usersWords]);
 
+  useEffect(() => {
+    if (!words[currentIndex] || allSentences.length === 0) return;
+
+    const matching = allSentences.filter((sentence: any) =>
+      sentence.wordIds.includes(words[currentIndex]._id),
+    );
+
+    setSentences(matching);
+  }, [currentIndex, allSentences, words]);
+
   //ToDo, change this to get words of topic, then check their review date.
 
   const handleNext = () => {
@@ -73,6 +87,11 @@ export default function LearnScreen() {
 
   const handleFlip = () => {
     setIsFlipped(true);
+  };
+
+  const getAllSentences = async () => {
+    const allSentences = await getSentences();
+    setAllSentences(allSentences);
   };
 
   let currentWord = words[currentIndex];
@@ -104,21 +123,33 @@ export default function LearnScreen() {
         </Text>
       </View>
       {!isFlipped ? (
-        /*Front*/ <View>
-          <Text style={WordStyles.EnglishWord}>
-            English:{currentWord.wordName}
-          </Text>
-          <View style={{ marginTop: 20, width: 150 }}>
+        /*Front*/ <View style={WordStyles.card}>
+          <Text style={WordStyles.label}>English</Text>
+          <Text style={WordStyles.mainWord}>{currentWord.wordName}</Text>
+          <View style={WordStyles.buttonWrap}>
             <Button title="Flip" onPress={handleFlip} />
           </View>
         </View>
       ) : (
         /*Back*/
-        <View>
-          <Text style={WordStyles.TranslatedWord}>
-            German:{currentWord.wordTranslation}
+        <View style={WordStyles.card}>
+          <Text style={WordStyles.label}>German</Text>
+          <Text style={WordStyles.mainWord}>{currentWord.wordTranslation}</Text>
+          <View style={WordStyles.divider} />
+          <Text style={WordStyles.subHeader}>
+            Sentence Examples:
+            {sentences.map((sentence, index) => (
+              <View key={index} style={WordStyles.sentenceBox}>
+                <Text style={WordStyles.sentenceEn}>
+                  {sentence.englishTranslation}
+                </Text>
+                <Text style={WordStyles.sentenceDe}>
+                  {sentence.sentenceText}
+                </Text>
+              </View>
+            ))}
           </Text>
-          <View style={{ marginTop: 20, width: 150 }}>
+          <View style={WordStyles.buttonRow}>
             <Button title="Incorrect" onPress={handleNext} color="red" />
           </View>
           <View style={{ marginTop: 20, width: 150 }}>
