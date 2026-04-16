@@ -7,7 +7,7 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import { Text, View } from 'react-native';
 //import { auth } from "../../firebase";
-
+import { Stack } from "expo-router";
 
 
 
@@ -67,3 +67,5 @@ export default function TabLayout() {
 
   
 }
+
+
