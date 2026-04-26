@@ -47,3 +47,5 @@ app-example
 # JetBrains IDEs
 .idea/
 *.iml
+
+*.wav

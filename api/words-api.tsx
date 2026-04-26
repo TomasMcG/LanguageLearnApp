@@ -54,3 +54,16 @@ export const generateSentences = async (words: string[]) => {
   );
   return response.json();
 };
+
+
+
+export const speakText = async (text: string) => {
+ const response = await fetch(`http://localhost:3000/api/tts/speak`, {
+ method: "POST",
+ headers: { "Content-Type": "application/json" },
+ body: JSON.stringify({ text }),
+ });
+
+ const data = await response.json();
+ return data.audioUrl;
+};
