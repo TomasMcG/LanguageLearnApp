@@ -14,14 +14,22 @@ const router = express.Router();
 
 router.post("/speak", async (req, res) => {
   try {
-    const text =
-      "Here's the dialogue script: \n" +
-      "Guten Tag means good day" +
-      " Now generate the audio for this text.";
+     
+  
+
+    const { text } = req.body;
+    if (!text) {
+      return res.status(400).json({ error: "text is required" });
+    }
+
+const prompt =
+  "Here's the dialogue script: \n" +
+  text +
+  " Now generate the audio for this text.";
 
     const response = await client.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text }] }],
+      contents: [{ parts: [{ text: prompt }] }],
       config: {
         responseModalities: ["AUDIO"],
         speechConfig: {

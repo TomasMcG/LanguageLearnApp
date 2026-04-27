@@ -3,7 +3,7 @@ import { WordStyles } from "@/styles/wordStyles";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
-import { getSentences, getUsersWords, getWords } from "../../api/words-api";
+import { getSentences, getUsersWords, getWords,getS } from "../../api/words-api";
 
 import { useQuery } from "@tanstack/react-query";
 import { auth } from "../../firebase";

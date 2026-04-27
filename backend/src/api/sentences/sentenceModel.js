@@ -14,7 +14,7 @@ const SentenceSchema = new Schema({
       required: true,
     },
   ],
-  /*userId:{},*/
+  userId: { type: String, required: true },
 });
 
 export default mongoose.model("Sentence", SentenceSchema);

@@ -34,36 +34,47 @@ export const addKnownUserWord = async (wordId: any, userId: any) => {
   return res.json();
 };
 
-export const getSentences = async () => {
-  const response = await fetch(`http://localhost:3000/api/sentences`, {});
+export const getSentences = async (userId: string) => {
+  const response = await fetch(
+    `http://localhost:3000/api/sentences?userId=${userId}`,
+  );
   return response.json();
 };
-
-
 
 export const generateSentences = async (words: string[]) => {
   const response = await fetch(
     `http://localhost:3000/api/openAI_API/generateSentences`,
     {
       method: "POST",
-      headers: { "Content-Type": "application/json" ,
-        Authorization: window.localStorage.getItem("token") || "",},
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: window.localStorage.getItem("token") || "",
+      },
       body: JSON.stringify({ knownWords: words }),
-    }
-    
+    },
   );
   return response.json();
 };
 
-
+export const saveSentences = async (
+  sentences: { sentence: string; translation: string }[],
+  userId: string,
+) => {
+  const response = await fetch(`http://localhost:3000/api/sentences`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ sentences, userId }),
+  });
+  return response.json();
+};
 
 export const speakText = async (text: string) => {
- const response = await fetch(`http://localhost:3000/api/tts/speak`, {
- method: "POST",
- headers: { "Content-Type": "application/json" },
- body: JSON.stringify({ text }),
- });
+  const response = await fetch(`http://localhost:3000/api/tts/speak`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  });
 
- const data = await response.json();
- return data.audioUrl;
+  const data = await response.json();
+  return data.audioUrl;
 };
