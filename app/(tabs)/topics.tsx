@@ -1,17 +1,27 @@
 import { styles } from "@/styles/inputStyles";
 import { WordStyles } from "@/styles/wordStyles";
 import { topicStyles } from "@/styles/topicStyles";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery,useQueryClient  } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Text, View, ScrollView} from "react-native";
 import { getTopics, getUsersWords, getWords } from "../../api/words-api";
 import { auth } from "../../firebase";
+import { useFocusEffect } from "expo-router";
+import { useCallback } from "react";
+
+
+;
 
 export default function DisplayWordsScreen() {
   const [words, setWords] = useState<any[]>([]);
 
   const [topics, setTopics] = useState<any[]>([]);
+
+const queryClient = useQueryClient();
+
+
+
 
   let user = auth.currentUser;
   if (user) {
@@ -47,6 +57,8 @@ export default function DisplayWordsScreen() {
         .map((knownWords: any) => knownWords.wordId)
     : [];
 
+    
+
   const router = useRouter();
 
   const reviseTopicButton = (topicName: any) => {
@@ -57,6 +69,12 @@ export default function DisplayWordsScreen() {
     router.push(`/learn/${topicName}`);
   };
 
+  useFocusEffect(
+  useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ["userWords", user?.uid] });
+  }, [user?.uid])
+);
+  
 
   useEffect(() => {
     getAllTopics();
@@ -82,33 +100,28 @@ export default function DisplayWordsScreen() {
       <Text>Topics:</Text>
 
       {topics.map((topic) => {
-        const wordsForTopic = words.filter(
-          (word) => word.topicName === topic.topicName,
-        );
-        const knownWordsForTopic = wordsForTopic.filter((word) =>
-          knownWords.includes(word._id),
-        
-        );
+  const wordsForTopic = words.filter(
+    (word) => word.topicName === topic.topicName,
+  );
+  const knownWordsForTopic = wordsForTopic.filter((word) =>
+    knownWords.includes(word._id),
+  );
+  const unknownWordsForTopic = wordsForTopic.filter(
+    (word) => !knownWords.includes(word._id),
+  );
+  const allWordsKnown = knownWordsForTopic.length === wordsForTopic.length;
 
-        const unknownWordsForTopic = wordsForTopic.filter(
-          (word) => !knownWords.includes(word._id),
-        );
+  // due words for this specific topic
+  const now = new Date();
+  const dueWordsForTopic = usersWords
+    ? usersWords.filter((uw: any) =>
+        uw.isKnown &&
+        new Date(uw.nextReviewDate) <= now &&
+        wordsForTopic.some((w: any) => w._id === uw.wordId)
+      )
+    : [];
 
-           const now = new Date();
-           const reviewWords = usersWords 
-        ? usersWords.filter((userWord: any) => 
-            userWord.isKnown && new Date(userWord.nextReviewDate) <= now
-          )
-        : [];
-         
-    
-
-        let isTopicComplete;
-        if (knownWordsForTopic.length === wordsForTopic.length) {
-          isTopicComplete = "Complete";
-        } else {
-          isTopicComplete = "Incomplete";
-        }
+  const noDueWords = dueWordsForTopic.length === 0;
 
         return (
           <View key={topic._id}  style={topicStyles.card}>
@@ -117,7 +130,7 @@ export default function DisplayWordsScreen() {
           
 
         
-              <View style={topicStyles.statsColumn}>
+              <View style={topicStyles.card}>
              <Text style={topicStyles.stat}>
       Total: {wordsForTopic.length}
     </Text>
@@ -130,22 +143,26 @@ export default function DisplayWordsScreen() {
     </View>
 
       <Text style={topicStyles.review}>
-    For Review: {reviewWords.length}
+    For Review: {dueWordsForTopic.length}
   </Text>
 
   
-     <View style={topicStyles.buttonWrapper}>
-            <Button
-              title="Learn"
-              onPress={() => learnTopicButton(topic.topicName)}
-            />
-             </View>
+     
+
+<View style={topicStyles.buttonWrapper}>
+  <Button
+    title="Learn"
+    onPress={() => learnTopicButton(topic.topicName)}
+    disabled={allWordsKnown}
+  />
+</View>
 
              <View style={topicStyles.buttonWrapper}>
            
              <Button
               title="Revise"
               onPress={() => reviseTopicButton(topic.topicName)}
+                  disabled={noDueWords}
             />
             </View>
            

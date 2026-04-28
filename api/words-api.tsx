@@ -74,7 +74,18 @@ export const speakText = async (text: string) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text }),
   });
-
   const data = await response.json();
   return data.audioUrl;
+};
+
+
+
+
+export const updateUserWord = async (wordId: string, userId: string, correct: boolean) => {
+  const response = await fetch(`http://localhost:3000/api/userWords/${userId}/${wordId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ correct }),
+  });
+  return response.json();
 };

@@ -3,10 +3,10 @@ import { WordStyles } from "@/styles/wordStyles";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
-import { getSentences, getUsersWords, getWords,getS } from "../../api/words-api";
-
-import { useQuery } from "@tanstack/react-query";
+import { getSentences, getUsersWords, getWords, updateUserWord } from "../../api/words-api";;
+import { useQuery ,useQueryClient} from "@tanstack/react-query";
 import { auth } from "../../firebase";
+
 
 export default function LearnScreen() {
   let user = auth.currentUser;
@@ -30,6 +30,7 @@ export default function LearnScreen() {
   const [isFlipped, setIsFlipped] = useState(false);
   const [sentences, setSentences] = useState<any[]>([]);
   const [allSentences, setAllSentences] = useState<any[]>([]);
+  const queryClient = useQueryClient()
 
   const router = useRouter();
   useEffect(() => {
@@ -73,24 +74,32 @@ export default function LearnScreen() {
     setSentences(matching);
   }, [currentIndex, allSentences, words]);
 
-  //ToDo, change this to get words of topic, then check their review date.
 
-  const handleNext = () => {
-    if (currentIndex < words.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      // router.push("/(auth)/displayWords");
-      router.back();
-    }
-    setIsFlipped(false);
-  };
+const handleNext = async (correct: boolean) => {
+  try {
+    await updateUserWord(words[currentIndex]._id, user!.uid, correct);
+    queryClient.invalidateQueries({ queryKey: ["userWords", user?.uid] });
 
+     if (!correct) {
+      // if word is wrong, put it back into the list to appear again.
+      setWords(prev => [...prev, prev[currentIndex]]);}
+  } catch (err) {
+    console.error("Failed to update word:", err);
+  }
+
+  if (currentIndex < words.length - 1) {
+    setCurrentIndex(currentIndex + 1);
+  } else {
+    router.back();
+  }
+  setIsFlipped(false);
+};
   const handleFlip = () => {
     setIsFlipped(true);
   };
 
   const getAllSentences = async () => {
-    const allSentences = await getSentences();
+    const allSentences = await getSentences(user!.uid);
     setAllSentences(allSentences);
   };
 
@@ -150,10 +159,11 @@ export default function LearnScreen() {
             ))}
           </Text>
           <View style={WordStyles.buttonRow}>
-            <Button title="Incorrect" onPress={handleNext} color="red" />
+            <Button title="Incorrect" onPress={() => handleNext(false)} color="red" />
           </View>
           <View style={{ marginTop: 20, width: 150 }}>
-            <Button title="Correct" onPress={handleNext} color="green" />
+            
+<Button title="Correct" onPress={() => handleNext(true)} color="green" />
           </View>
         </View>
       )}

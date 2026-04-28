@@ -22,7 +22,7 @@ export default function LearnScreen() {
   });
 
   const { topic } = useLocalSearchParams<{ topic: string }>();
-
+const [topicWords, setTopicWords] = useState<any[]>([]);
   const [words, setWords] = useState<any[]>([]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -31,27 +31,36 @@ export default function LearnScreen() {
 
   const [knownWords, setKnownWords] = useState<string[]>([]);
 
+  const [introSeen, setIntroSeen] = useState(false);
+
   const router = useRouter();
  
   useEffect(() => {
     const fetchWords = async () => {
-      try {
-        const allWords = await getWords();
-        let filtered = allWords.filter((w: any) => w.topicName === topic);
+  try {
+    const allWords = await getWords();
 
-        const reviewWords = usersWords
-          ? usersWords.filter((userWord: any) => userWord.isKnown)
-          : [];
+    // get all words for this topic, then the known word Ids for the users, then filter out the words that are known and slice it to 5
+    let filtered = allWords.filter((w: any) => w.topicName === topic);
 
-        const kWords= reviewWords.map((knownWords: any) => knownWords.wordId);
-        setKnownWords(kWords);
-        filtered = filtered.filter((w: any) => !knownWords.includes(w._id));
-        setWords(filtered);
-        setCurrentIndex(0);
-      } catch (error) {
-        console.error("Failed to fetch words:", error);
-      }
-    };
+    
+    const knownWordIds = usersWords
+      ? usersWords.filter((uw: any) => uw.isKnown).map((uw: any) => uw.wordId)
+      : [];
+
+    
+    filtered = filtered.filter((w: any) => !knownWordIds.includes(w._id));
+
+    
+    filtered = filtered.slice(0, 5);
+
+    setTopicWords(allWords.filter((w: any) => w.topicName === topic));
+    setWords(filtered);
+    setCurrentIndex(0);
+  } catch (error) {
+    console.error("Failed to fetch words:", error);
+  }
+};
 
     fetchWords();
   }, [topic, usersWords]);
@@ -68,6 +77,12 @@ export default function LearnScreen() {
   const handleFlip = () => {
     setIsFlipped(true);
   };
+
+  const isFirstTime = usersWords
+  ? !usersWords.some((uw: any) =>
+      words.some((w: any) => w._id === uw.wordId && uw.isKnown)
+    )
+  : true;
 
   let currentWord = words[currentIndex];
 
@@ -89,22 +104,27 @@ export default function LearnScreen() {
     );
   }
 
-  if (!knownWords) {
-    return (
-      <View>
-        <View>
-          <Text>User Id: </Text>
-          <Text style={styles.TextHeader}>Screens For Learning {topic}</Text>
-          <Text style={styles.TextHeader}>
-            Total Words: {words.length}, Learning Objectives: By doing this
-            topic you will encounter each of the following words which will then
-            become available for review. By reviewing after having improved your
-            retention the outcome is to learn the translation of the words.
-          </Text>
+  if (isFirstTime && !introSeen) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.TextHeader}>Welcome to {topic}</Text>
+      <Text style={{ marginVertical: 10 }}>
+        In this topic you will learn {topicWords.length} words:
+      </Text>
+
+      {topicWords.map((word, index) => (
+        <View key={index} style={WordStyles.card}>
+          <Text style={WordStyles.mainWord}>{word.wordName}</Text>
+          <Text style={WordStyles.label}>{word.wordTranslation}</Text>
         </View>
+      ))}
+
+      <View style={{ marginTop: 20 }}>
+        <Button title="Start Learning" onPress={() => setIntroSeen(true)} />
       </View>
-    );
-  }
+    </View>
+  );
+}
   
   
   if (isPending ) {

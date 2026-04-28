@@ -49,4 +49,38 @@ router.post(
   }),
 );
 
+
+router.patch("/:userId/:wordId", asyncHandler(async (req, res) => {
+  const { userId, wordId } = req.params;
+  const { correct } = req.body; // true or false, did you remember the word or not
+
+  const userWord = await userWords.findOne({ userId, wordId });
+  if (!userWord) return res.status(404).json({ message: "UserWord not found" });
+
+  //used to set if wrong to 0, or double the interval for time to next review otherwise. this is used to determine the next review date
+  let interval;
+  if (!correct) {
+    interval = 0; 
+  } else {
+    interval = userWord.timeToNextReview <= 0
+      ? 1
+      : userWord.timeToNextReview * 2;
+  }
+
+  const nextReviewDate = new Date();
+  nextReviewDate.setDate(nextReviewDate.getDate() + interval);
+
+  const updated = await userWords.findOneAndUpdate(
+    { userId, wordId },
+    {
+      timeToNextReview: interval,
+      nextReviewDate,
+      lastReviewed: new Date(),
+    },
+    { new: true }
+  );
+
+  res.status(200).json(updated);
+}));
+
 export default router;
