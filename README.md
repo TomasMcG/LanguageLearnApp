@@ -1,50 +1,54 @@
-# Welcome to your Expo app 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Get started
+# Language Learning App 
 
-1. Install dependencies
+A mobile language learning app built with **React Native (Expo)** and a **Node.js + Express backend**.  
+It uses spaced repetition (SRS), topic-based learning, and AI-generated sentences for context and audio playback for them.
 
-   ```bash
-   npm install
-   ```
+---
 
-2. Start the app
+## Features
 
-   ```bash
-   npx expo start
-   ```
+- Firebase Authentication (login/register)
+- Topic based word learning system
+- Spaced Repetition System (SRS)
+- Track progress per topic
+- Daily review of known words
+- AI generated sentences using learned vocabulary
+- Text to speech audio playback
+- React Native app for web and mobile
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## How It Works
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+1. User logs in
+2. Selects a topic
+3. Learns 5 new words per session
+4. Encountered words are marked as known and can be reviewed.
+5. Words are scheduled for review (SRS) on certain dates.
+6. Known words are used to generate AI sentences
+7. Sentences can be played as audio
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## Tech Stack
 
-```bash
-npm run reset-project
-```
+**Frontend**
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- React Native (Expo)
+- Firebase Auth
 
-## Learn more
+**Backend**
 
-To learn more about developing your project with Expo, look at the following resources:
+- Node.js + Express
+- Deployed on AWS EC2
+- MongoDB Atlas
+- OpenAI API
+- Gemini 2.5 Text-to-Speech API
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## Authentication
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Firebase handles login/signup
