@@ -37,7 +37,7 @@ const [user, setUser] = useState();
      <QueryClientProvider client={queryClient}>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       
-      <Stack>
+    <Stack screenOptions={{ headerShown: false }}>
             {user ? (
           // User is logged in
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

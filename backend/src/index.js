@@ -5,6 +5,7 @@ import "../db/index.js";
 import generateSentencesRouter from "./api/openAI_API/index.js";
 import sentencesRouter from "./api/sentences/index.js";
 import topicsRouter from "./api/topics/index.js";
+import ttsRouter from "./api/tts/ttsRouter.js";
 import userWordsRouter from "./api/userWords/index.js";
 import wordsRouter from "./api/words/index.js";
 import { wordData } from "./api/words/wordData.js";
@@ -16,6 +17,8 @@ const port = process.env.port || 3000;
 app.use(cors());
 app.use(express.json());
 
+app.use("/audio", express.static("public/audio"));
+
 app.get("/", (req, res) => {
   res.send(wordData);
 });
@@ -24,6 +27,7 @@ app.use("/api/topics", topicsRouter);
 app.use("/api/userWords", userWordsRouter);
 app.use("/api/sentences", sentencesRouter);
 app.use("/api/openAI_API", generateSentencesRouter);
+app.use("/api/tts", ttsRouter);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);

@@ -24,7 +24,7 @@ You are a language teacher.
 Generate English and German sentences only using the words provided.
 Adhere to provided grammer rules for sentence complexity.
 You can add basic words to fill out the sentences if unable to form with just the words given.
-Return JSON: sentence, translation.
+Return JSON array with fields: sentence (German), translation (English)
 `;
 
 const grammerRules = ["PastTense,PresentTense","VerbEndings"]
