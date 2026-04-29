@@ -56,12 +56,12 @@ export default function LoginScreen() {
       <Button title="Login" onPress={login} />
       <Text style={styles.TextHeader}>{message}</Text>
 
-      <View>
+      {/*<View>
         <Button title="Qucik Login" onPress={quickLogin} />
         <Text>
           {quickEmail},{quickPass}
         </Text>
-      </View>
+      </View>*/}
     </View>
   );
 }

@@ -2,7 +2,7 @@
 
 # Language Learning App 
 
-A mobile language learning app built with **React Native (Expo)** and a **Node.js + Express backend**.  
+A language learning app built with **React Native (Expo)** and a **Node.js + Express backend**.  
 It uses spaced repetition (SRS), topic-based learning, and AI-generated sentences for context and audio playback for them.
 
 ---
